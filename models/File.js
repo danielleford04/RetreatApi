@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var StoredFormSchema = new mongoose.Schema({
+var FileSchema = new mongoose.Schema({
   name: { type: String, required: true},
   note: String,
   upload_date: { type: Date, required: true},
@@ -8,4 +8,4 @@ var StoredFormSchema = new mongoose.Schema({
   updated_at: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('StoredForm', StoredFormSchema);
+module.exports = mongoose.model('File', FileSchema);

@@ -1,6 +1,6 @@
 const fs = require('fs');
 var next = require('next');
-var StoredForm = require('./models/StoredForm.js');
+var File = require('./models/File.js');
 
 function fileUploadMiddleware(req, res, next) {
     console.log(req.body);
@@ -15,7 +15,7 @@ function fileUploadMiddleware(req, res, next) {
     };
     //
     req.body.note ? post_data.note = req.body.note : null ;
-    StoredForm.create(post_data, function (err, post) {
+    File.create(post_data, function (err, post) {
         if (err) return next(err);
         res.json(post);
     });

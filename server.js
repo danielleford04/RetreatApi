@@ -25,7 +25,7 @@ var instructions = require('./routes/instructions');
 var phases = require('./routes/phases');
 var emails = require('./routes/emails');
 var retreatants = require('./routes/retreatants');
-var storedForms = require('./routes/storedForms');
+var files = require('./routes/files');
 
 app.prepare()
   .then(() => {
@@ -68,9 +68,7 @@ app.prepare()
       server.use('/instructions', instructions);
       server.use('/phases', phases);
       server.use('/retreatants', retreatants);
-      server.use('/storedForms', storedForms);
-      server.use('/retreatants', retreatants);
-      server.use('/storedForms', storedForms);
+      server.use('/files', files);
 
     server.get('*', (req, res) => {
       return handle(req, res)

@@ -12,7 +12,7 @@ class Uploader extends Component {
     data.append('file', event.target.files[0])
     data.append('name', 'some value user types')
     data.append('description', 'some value user types')
-    axios.post('/storedForms/files', data).then((response) => {
+    axios.post('/files/files', data).then((response) => {
       this.setState({
         imageUrl: response.data.fileUrl
       })
