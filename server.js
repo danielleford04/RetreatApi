@@ -5,6 +5,7 @@ const multer = require('multer')
 const bodyParser = require('body-parser')
 const fileUploadMiddleware = require('./file-upload-middleware')
 var mongoose = require('mongoose');
+const passport = require("passport");
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
@@ -16,6 +17,8 @@ mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/retreats')
     .then(() =>  console.log('connection successful'))
     .catch((err) => console.error(err));
+
+
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -40,6 +43,11 @@ app.prepare()
 
     server.use(bodyParser.urlencoded({ extended: true }))
     server.use(bodyParser.json())
+
+      // Passport middleware
+      server.use(passport.initialize());
+// Passport config
+      require("./validation/passport")(passport);
 
     const storage = multer.memoryStorage()
     const upload = multer({ storage })

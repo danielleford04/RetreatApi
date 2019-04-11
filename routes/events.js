@@ -6,9 +6,9 @@ var Phase = require('../models/Phase.js');
 
 /* GET ALL EVENTS */
 router.get('/', function(req, res, next) {
-  Event.find(function (err, products) {
+  Event.find(function (err, events) {
     if (err) return next(err);
-    res.json(products);
+    res.json(events);
   });
 });
 

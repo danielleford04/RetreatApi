@@ -2,11 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0fddca03-7449-4e86-ade0-accaae83fabb" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/uploader.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/uploader.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/file-upload-middleware.js" beforeDir="false" afterPath="$PROJECT_DIR$/file-upload-middleware.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/StoredForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/File.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/storedForms.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/files.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/User.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/validation/login.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/validation/passport.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/validation/register.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/events.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/events.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/users.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -56,11 +60,12 @@
       <usages-collector id="statistics.lifecycle.project">
         <counts>
           <entry key="project.closed" value="4" />
+          <entry key="project.open.time.26" value="1" />
           <entry key="project.open.time.28" value="1" />
           <entry key="project.open.time.29" value="1" />
           <entry key="project.open.time.8" value="1" />
           <entry key="project.open.time.9" value="2" />
-          <entry key="project.opened" value="5" />
+          <entry key="project.opened" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -86,6 +91,35 @@
       <usages-collector id="statistics.js.language.service.starts" />
       <usages-collector id="statistics.vcs.git.usages" />
     </session>
+    <session id="1763475203">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.1" value="2" />
+          <entry key="project.opened" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="js" value="4" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="JavaScript" value="4" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="js" value="69" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="JavaScript" value="69" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
@@ -101,13 +135,13 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/file-upload-middleware.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
-              <caret line="13" column="33" lean-forward="true" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
+            <state relative-caret-position="195">
+              <caret line="13" column="33" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/components/uploader.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="195">
@@ -119,19 +153,45 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/files.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="12" column="30" lean-forward="true" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
+            <state relative-caret-position="180">
+              <caret line="12" column="30" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/server.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" column="37" selection-start-line="7" selection-start-column="37" selection-end-line="7" selection-end-column="37" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server.js">
+        <entry file="file://$PROJECT_DIR$/routes/events.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="115">
-              <caret line="27" column="9" selection-start-line="27" selection-start-column="9" selection-end-line="27" selection-end-column="9" />
+            <state relative-caret-position="15">
+              <caret line="6" column="20" selection-start-line="6" selection-start-column="20" selection-end-line="6" selection-end-column="20" />
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/validation/login.js">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/routes/users.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-219" />
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/models/User.js">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
     </leaf>
@@ -161,14 +221,14 @@
         <option value="$PROJECT_DIR$/models/Instruction.js" />
         <option value="$PROJECT_DIR$/models/Event.js" />
         <option value="$PROJECT_DIR$/models/StoredForm.js" />
-        <option value="$PROJECT_DIR$/routes/events.js" />
         <option value="$PROJECT_DIR$/routes/emails.js" />
         <option value="$PROJECT_DIR$/models/Email.js" />
-        <option value="$PROJECT_DIR$/server.js" />
         <option value="$PROJECT_DIR$/routes/files.js" />
         <option value="$PROJECT_DIR$/models/File.js" />
         <option value="$PROJECT_DIR$/file-upload-middleware.js" />
         <option value="$PROJECT_DIR$/components/uploader.js" />
+        <option value="$PROJECT_DIR$/routes/events.js" />
+        <option value="$PROJECT_DIR$/server.js" />
       </list>
     </option>
   </component>
@@ -200,6 +260,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -221,7 +282,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -231,6 +291,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/models" />
       <recent name="$PROJECT_DIR$/routes" />
       <recent name="$PROJECT_DIR$" />
     </key>
@@ -270,11 +331,23 @@
       <workItem from="1543525834539" duration="69000" />
       <workItem from="1543526051280" duration="2582000" />
       <workItem from="1543697972540" duration="4552000" />
+      <workItem from="1547703425954" duration="366000" />
+      <workItem from="1554947833418" duration="60000" />
+      <workItem from="1554949346141" duration="643000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34625000" />
+    <option name="totallyTimeSpent" value="35694000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
     <frame x="249" y="92" width="1136" height="788" extended-state="0" />
@@ -290,7 +363,7 @@
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39970282" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32986626" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.32838038" />
@@ -312,13 +385,11 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/routes/events.js</url>
           <line>81</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/routes/events.js</url>
           <line>82</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
@@ -356,13 +427,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
           <caret line="13" selection-start-line="13" selection-end-line="19" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/events.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="81" column="8" selection-start-line="81" selection-start-column="8" selection-end-line="81" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -418,20 +482,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="27" column="9" selection-start-line="27" selection-start-column="9" selection-end-line="27" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/files.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="12" column="30" lean-forward="true" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/File.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -441,8 +491,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/file-upload-middleware.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="13" column="33" lean-forward="true" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
+        <state relative-caret-position="195">
+          <caret line="13" column="33" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/files.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="30" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
         </state>
       </provider>
     </entry>
@@ -450,6 +507,31 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
           <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/events.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="6" column="20" selection-start-line="6" selection-start-column="20" selection-end-line="6" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/validation/login.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/users.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-219" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/User.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="37" selection-start-line="7" selection-start-column="37" selection-end-line="7" selection-end-column="37" />
         </state>
       </provider>
     </entry>
