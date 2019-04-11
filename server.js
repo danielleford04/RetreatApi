@@ -19,8 +19,6 @@ mongoose.connect('mongodb://localhost/retreats')
     .catch((err) => console.error(err));
 
 
-
-var index = require('./routes/index');
 var users = require('./routes/users');
 var events = require('./routes/events');
 var tasks = require('./routes/tasks');
@@ -36,7 +34,7 @@ app.prepare()
 
       server.use(function(req, res, next) {
           res.header("Access-Control-Allow-Origin", "*");
-          res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+          res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
           res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
           next();
       });
@@ -46,37 +44,37 @@ app.prepare()
 
       // Passport middleware
       server.use(passport.initialize());
-// Passport config
+      // Passport config
       require("./validation/passport")(passport);
 
-    const storage = multer.memoryStorage()
-    const upload = multer({ storage })
-
-      server.post('/upload', upload.single('image'), function(req, res, next) {
-            console.log(req.body)
-          const image = req.file.buffer
-          console.log(image);
-
-      });
-
-    server.post('/files', upload.single('file'), fileUploadMiddleware)
-
-    server.post('/api/changeProfilePicture', (req, res) => {
-      console.log('/api/changeProfilePicture')
-      console.log(req.body)
-      // you can do whatever you want with this data
-      // change profile pic, save to DB, or send it to another API
-      res.end()
-    })
+    // const storage = multer.memoryStorage()
+    // const upload = multer({ storage })
+    //
+    //   server.post('/upload', upload.single('image'), function(req, res, next) {
+    //         console.log(req.body)
+    //       const image = req.file.buffer
+    //       console.log(image);
+    //
+    //   });
+    //
+    // server.post('/files', upload.single('file'), fileUploadMiddleware)
+    //
+    // server.post('/api/changeProfilePicture', (req, res) => {
+    //   console.log('/api/changeProfilePicture')
+    //   console.log(req.body)
+    //   // you can do whatever you want with this data
+    //   // change profile pic, save to DB, or send it to another API
+    //   res.end()
+    // })
 
       server.use('/users', users);
-      server.use('/emails', emails);
-      server.use('/events', events);
-      server.use('/tasks', tasks);
-      server.use('/instructions', instructions);
-      server.use('/phases', phases);
-      server.use('/retreatants', retreatants);
-      server.use('/files', files);
+      server.use('/emails', passport.authenticate('jwt', {session: false}), emails);
+      server.use('/events', passport.authenticate('jwt', {session: false}), events);
+      server.use('/tasks', passport.authenticate('jwt', {session: false}), tasks);
+      server.use('/instructions', passport.authenticate('jwt', {session: false}), instructions);
+      server.use('/phases', passport.authenticate('jwt', {session: false}), phases);
+      server.use('/retreatants', passport.authenticate('jwt', {session: false}), retreatants);
+      server.use('/files', passport.authenticate('jwt', {session: false}), files);
 
     server.get('*', (req, res) => {
       return handle(req, res)
