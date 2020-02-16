@@ -27,6 +27,7 @@ var phases = require('./routes/phases');
 var emails = require('./routes/emails');
 var retreatants = require('./routes/retreatants');
 var files = require('./routes/files');
+var defaults = require('./routes/defaults');
 
 app.prepare()
   .then(() => {
@@ -75,6 +76,7 @@ app.prepare()
       server.use('/phases', passport.authenticate('jwt', {session: false}), phases);
       server.use('/retreatants', passport.authenticate('jwt', {session: false}), retreatants);
       server.use('/files', passport.authenticate('jwt', {session: false}), files);
+      server.use('/defaults', passport.authenticate('jwt', {session: false}), defaults);
 
     server.get('*', (req, res) => {
       return handle(req, res)

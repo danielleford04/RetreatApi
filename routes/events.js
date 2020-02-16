@@ -6,7 +6,6 @@ var Phase = require('../models/Phase.js');
 
 /* GET ALL EVENTS */
 router.get('/', function(req, res, next) {
-  console.log(req)
   Event.find(function (err, events) {
     if (err) return next(err);
     res.json(events);
@@ -25,6 +24,11 @@ router.get('/:id', function(req, res, next) {
 router.post('/', function(req, res, next) {
   Event.create(req.body, function (err, post) {
     if (err) return next(err);
+
+    //get all defaults for this user
+      //see if there are defaults for the type as this type
+      //if so, create tasks, instructions and emails from defaults for correct phase
+
     console.log(post);
     createEventPhases();
 

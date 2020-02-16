@@ -1,0 +1,118 @@
+var express = require('express');
+var router = express.Router();
+var mongoose = require('mongoose');
+var Default = require('../models/Default.js');
+var Phase = require('../models/Phase.js');
+var User = require('../models/User.js');
+
+/* GET ALL DEFAULTS */
+router.get('/', function(req, res, next) {
+    Default.find(function (err, products) {
+        if (err) return next(err);
+        res.json(products);
+    });
+});
+
+/* GET ALL DEFAULTS BY USER */
+router.get('/user/:user_id', function(req, res, next) {
+    Default.find({ user_id: req.params.user_id } , function (err, post) {
+        if (err) return next(err);
+        res.json(post);
+    });
+});
+
+/* GET SINGLE DEFAULT BY ID */
+router.get('/:id', function(req, res, next) {
+    Default.findById(req.params.id, function (err, post) {
+        if (err) return next(err);
+        res.json(post);
+    });
+});
+
+/* CREATE DEFAULT */
+router.post('/', function(req, res, next) {
+    var user_info = req.user;
+    Default.create(req.body, function (err, post) {
+        if (err) return next(err);
+        
+        createEventPhases();
+        addToUserDefaults();
+
+        function createEventPhases() {
+            var registration_body = {
+                'name': "Registration",
+                'event_id': post._id
+            };
+            var preparation_body = {
+                'name': "Preparation",
+                'event_id': post._id
+            };
+            var arrival_body = {
+                'name': "Arrival",
+                'event_id': post._id
+            };
+            var during_body = {
+                'name': "During",
+                'event_id': post._id
+            };
+            var closing_body = {
+                'name': "Closing",
+                'event_id': post._id
+            };
+            var follow_up_body = {
+                'name': "Follow Up",
+                'event_id': post._id
+            };
+            Phase.create(registration_body, function (err, post) {
+                if (err) return next(err);
+                Phase.create(preparation_body, function (err, post) {
+                    if (err) return next(err);
+                    Phase.create(arrival_body, function (err, post) {
+                        if (err) return next(err);
+                        Phase.create(during_body, function (err, post) {
+                            if (err) return next(err);
+                            Phase.create(closing_body, function (err, post) {
+                                if (err) return next(err);
+                                Phase.create(follow_up_body, function (err, post) {
+                                    if (err) return next(err);
+
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        }
+        function addToUserDefaults() {
+            var user_id = user_info._id;
+            var defaults_info = {type: req.body.type, id: post._id};
+            if (user_info.defaults) {
+                user_info.defaults.push(defaults_info)
+            } else {
+                user_info.defaults = [defaults_info]
+            }
+            User.findByIdAndUpdate(user_id, user_info, function (err, post) {
+                if (err) return next(err);
+            });
+        }
+        res.json(post);
+    });
+});
+
+/* UPDATE DEFAULT */
+router.put('/:id', function(req, res, next) {
+    Default.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
+        if (err) return next(err);
+        res.json(post);
+    });
+});
+
+/* DELETE DEFAULT */
+router.delete('/:id', function(req, res, next) {
+    Default.findByIdAndRemove(req.params.id, req.body, function (err, post) {
+        if (err) return next(err);
+        res.json(post);
+    });
+});
+
+module.exports = router;
