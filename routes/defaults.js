@@ -32,9 +32,11 @@ router.get('/:id', function(req, res, next) {
 /* CREATE DEFAULT */
 router.post('/', function(req, res, next) {
     var user_info = req.user;
+    var user_response;
+    console.log('create')
     Default.create(req.body, function (err, post) {
         if (err) return next(err);
-        
+
         createEventPhases();
         addToUserDefaults();
 
@@ -91,11 +93,14 @@ router.post('/', function(req, res, next) {
             } else {
                 user_info.defaults = [defaults_info]
             }
-            User.findByIdAndUpdate(user_id, user_info, function (err, post) {
+            User.findByIdAndUpdate(user_id, user_info, {new: true}, function (err, post) {
+                // user_response = post;
                 if (err) return next(err);
+                res.json(post)
             });
         }
-        res.json(post);
+        //returns user response w defaults updated in user info
+        // res.json(user_response);
     });
 });
 

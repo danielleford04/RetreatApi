@@ -105,7 +105,6 @@ router.get('/', function(req, res, next) {
 router.get('/:id', function(req, res, next) {
     User.findById(req.params.id, function (err, post) {
         if (err) return next(err);
-        console.log('get',post)
         post.password = undefined;
         res.json(post);
     });
@@ -113,7 +112,7 @@ router.get('/:id', function(req, res, next) {
 
 /* UPDATE USER */
 router.put('/:id', function(req, res, next) {
-    User.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
+    User.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, post) {
         if (err) return next(err);
         res.json(post);
     });
