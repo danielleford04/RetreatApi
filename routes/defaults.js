@@ -33,7 +33,6 @@ router.get('/:id', function(req, res, next) {
 router.post('/', function(req, res, next) {
     var user_info = req.user;
     var user_response;
-    console.log('create')
     Default.create(req.body, function (err, post) {
         if (err) return next(err);
 

@@ -29,7 +29,6 @@ router.get('/:id', function(req, res, next) {
 
 /* SAVE INSTRUCTION */
 router.post('/', function(req, res, next) {
-  console.log(req);
   Instruction.create(req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
