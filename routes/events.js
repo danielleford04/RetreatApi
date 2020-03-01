@@ -16,6 +16,14 @@ router.get('/', function(req, res, next) {
   });
 });
 
+/* GET ALL EVENTS BY USER*/
+router.get('/user/', function(req, res, next) {
+    Event.find({ user_id: req.user._id } , function (err, post) {
+        if (err) return next(err);
+        res.json(post);
+    });
+});
+
 /* GET SINGLE EVENT BY ID */
 router.get('/:id', function(req, res, next) {
   Event.findById(req.params.id, function (err, post) {
@@ -34,8 +42,10 @@ router.post('/', function(req, res, next) {
         default_id = user_default.id
         }
     }
+    var event_body = req.body;
+    event_body.user_id = user_info._id;
 
-  Event.create(req.body, function (err, post) {
+  Event.create(event_body, function (err, post) {
     if (err) return next(err);
     var event_id = post._id;
     var event_start_date = post.start_date;

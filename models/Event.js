@@ -7,6 +7,7 @@ var EventSchema = new mongoose.Schema({
   end_date: Date,
   updated_at: { type: Date, default: Date.now },
   retreatant_count: { type: Number, required: true},
+    user_id: { type: String, required: true}
 });
 
 module.exports = mongoose.model('Event', EventSchema);
