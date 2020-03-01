@@ -5,9 +5,9 @@ var Instruction = require('../models/Instruction.js');
 
 /* GET ALL INSTRUCTIONS */
 router.get('/', function(req, res, next) {
-  Instruction.find(function (err, products) {
+  Instruction.find(function (err, post) {
     if (err) return next(err);
-    res.json(products);
+    res.json(post);
   });
 });
 

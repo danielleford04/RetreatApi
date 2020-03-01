@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
+var moment = require('moment');
 var Event = require('../models/Event.js');
 var Phase = require('../models/Phase.js');
 var Task = require('../models/Task.js');
@@ -37,13 +38,14 @@ router.post('/', function(req, res, next) {
   Event.create(req.body, function (err, post) {
     if (err) return next(err);
     var event_id = post._id;
+    var event_start_date = post.start_date;
     var registration_id;
     var preparation_id;
     var arrival_id;
     var during_id;
     var closing_id;
     var follow_up_id;
-    
+
     createEventPhases();
 
     function createEventPhases() {
@@ -143,7 +145,7 @@ router.post('/', function(req, res, next) {
                 let task_body = {
                     name: task.name,
                     phase_id: phase_id,
-                    due_date: task.due_date,
+                    due_date: moment(event_start_date).subtract(task.default_due_date, "days"),
                     complete: 0
                 };
                 if (task.content) {task_body.content = task.content}
