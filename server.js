@@ -7,6 +7,8 @@ const fileUploadMiddleware = require('./file-upload-middleware')
 var mongoose = require('mongoose');
 const passport = require("passport");
 
+var cors = require('cors')
+
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
@@ -39,7 +41,7 @@ app.prepare()
           res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
           next();
       });
-
+      server.use(cors());
     server.use(bodyParser.urlencoded({ extended: true }))
     server.use(bodyParser.json())
 

@@ -13,6 +13,7 @@ const validateLoginInput = require("../validation/login");
 // @access Public
 // need keys: name, email, password, password2 (must match)
 router.post("/register", (req, res) => {
+    console.log('hello')
     // Form validation
     const { errors, isValid } = validateRegisterInput(req.body);
 // Check validation
@@ -25,6 +26,7 @@ router.post("/register", (req, res) => {
         }
         const newUser = new User({
             first_name: req.body.first_name,
+            last_name: req.body.last_name,
             email: req.body.email,
             password: req.body.password
         });
