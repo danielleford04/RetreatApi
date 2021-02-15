@@ -13,7 +13,6 @@ const validateLoginInput = require("../validation/login");
 // @access Public
 // need keys: name, email, password, password2 (must match)
 router.post("/register", (req, res) => {
-    console.log('hello')
     // Form validation
     const { errors, isValid } = validateRegisterInput(req.body);
 // Check validation
@@ -49,6 +48,7 @@ router.post("/register", (req, res) => {
 // @desc Login user and return JWT token
 // @access Public
 router.post("/login", (req, res) => {
+    console.log(req.body)
     // Form validation
     const { errors, isValid } = validateLoginInput(req.body);
 // Check validation
@@ -65,7 +65,9 @@ router.post("/login", (req, res) => {
         }
 // Check password
         bcrypt.compare(password, user.password).then(isMatch => {
+            console.log(password, user.password)
             if (isMatch) {
+                console.log('if')
                 // User matched
                 // Create JWT Payload
                 const payload = {
@@ -113,7 +115,8 @@ router.get('/:id', function(req, res, next) {
 });
 
 /* UPDATE USER */
-router.put('/:id', function(req, res, next) {
+router.put('/:id', async function(req, res, next) {
+    if(req.body.password) {req.body.password = await bcrypt.hash(req.body.password, 8)}
     User.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, post) {
         if (err) return next(err);
         res.json(post);
