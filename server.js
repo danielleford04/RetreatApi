@@ -71,7 +71,7 @@ app.prepare()
     // })
 
       server.use('/users', users);
-      server.use('/emails', passport.authenticate('jwt', {session: false}), emails);
+      server.use('/emails', emails);
       server.use('/events', passport.authenticate('jwt', {session: false}), events);
       server.use('/tasks', passport.authenticate('jwt', {session: false}), tasks);
       server.use('/instructions', passport.authenticate('jwt', {session: false}), instructions);

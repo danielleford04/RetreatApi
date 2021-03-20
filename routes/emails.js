@@ -2,9 +2,35 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var nodemailer = require('nodemailer');
+let aws = require('aws-sdk');
 // var cron = require('node-cron');
 var Email = require('../models/Email.js');
 
+//Access Key ID:
+//    AKIAI2AHW3UEQ6T56HKA
+//Secret Access Key:
+//    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
+
+// configure AWS SDK
+// aws.config.loadFromPath('config.json');
+// var myCredentials = new AWS.CognitoIdentityCredentials({IdentityPoolId:'IDENTITY_POOL_ID'});
+// // var myConfig = new AWS.Config({
+// //     credentials: myCredentials, region: 'us-east-1'
+// // });
+
+aws.config.update({
+    accessKeyId: 'AKIAI2AHW3UEQ6T56HKA',
+    secretAccessKey: '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',
+    region: 'us-east-2'
+});
+
+// aws.config.getCredentials(function(err) {
+//     if (err) console.log(err.stack);
+//     // credentials not loaded
+//     else {
+//         console.log("Access key:", AWS.config.credentials.accessKeyId);
+//     }
+// });
 
 /* GET ALL EMAILS */
 router.get('/', function(req, res, next) {
@@ -39,110 +65,30 @@ router.post('/', function(req, res, next) {
   });
 });
 
-// /* SEND EMAIL */
-// router.post('/send', function(req,res,next) {
-// //     console.log(1)
-// //     // create reusable transporter object using the default SMTP transport
-// //     var transporter = nodemailer.createTransport('smtps://danielleford04%40gmail.com:NeoDiamoa44@smtp.gmail.com');
-// //
-// //     var mailOptions = req.body;
-// //     console.log(mailOptions)
-// //
-// // // create template based sender function
-// //     var sendTemplateEmail = transporter.sendMail({
-// //         subject: mailOptions.subject,
-// //         text: mailOptions.text,
-// //         html: mailOptions.html
-// //     }, {
-// //         from: mailOptions.from,
-// //     });
-// //
-// // // use template based sender to send a message
-// //     sendTemplateEmail({
-// //         to: mailOptions.to
-// //     }, mailOptions.context, function(err, info){
-// //         if(err){
-// //             console.log('Error');
-// //         }else{
-// //             console.log('Message sent: ' + info.response);
-// //             // res.send(info)
-// //
-// //             var newEmail = new Email({
-// //                 date			: new Date(),
-// //                 recipients		: mailOptions.to
-// //             })
-// //
-// //             newEmail.save( function(err, doc){
-// //                 res.send(doc)
-// //             } )
-// //         }
-// //     });
-//
-// // Generate test SMTP service account from ethereal.email
-// // Only needed if you don't have a real mail account for testing
-// //     nodemailer.createTestAccount((err, account) => {
-//         // create reusable transporter object using the default SMTP transport
-//         // let transporter = nodemailer.createTransport({
-//         //     host: 'smtp.ethereal.email',
-//         //     port: 587,
-//         //     secure: false, // true for 465, false for other ports
-//         //     auth: {
-//         //         user: account.user, // generated ethereal user
-//         //         pass: account.pass // generated ethereal password
-//         //     }
-//         // });
-//         console.log(req.body)
-//         let transporter = nodemailer.createTransport('smtps://danielleford04%40gmail.com:NeoDiamoa44@smtp.gmail.com');
-//
-//         // setup email data with unicode symbols
-//         let mailOptions = {
-//             from: '"Fred Foo 👻" <foo@example.com>', // sender address
-//             to: 'danielleford04@gmail.com', // list of receivers
-//             subject: req.body.subject, // Subject line
-//             text: req.body.body, // plain text body
-//             html: req.body.body // html body
-//         };
-//
-//         // send mail with defined transport object
-//         transporter.sendMail(mailOptions, (error, info) => {
-//             if (error) {
-//                 return console.log(error);
-//             }
-//             res.send(info)
-//             console.log('Message sent: %s', info.messageId);
-//             // Preview only available when sending through an Ethereal account
-//             console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-//
-//             // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-//             // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-//         });
-//     // });
-// })
-
 /* SEND EMAIL */
 router.post('/send', function(req, res, next) {
-    let mailOptions = {
+    // TODO: rewrite w email utility
+
+    // create Nodemailer SES transporter
+    let transporter = nodemailer.createTransport({
+        SES: new aws.SES({ region: 'us-east-2', apiVersion: "2010-12-01" })
+
+    });
+
+// send some mail
+    transporter.sendMail({
         from: 'danielleford04@gmail.com',
         to: 'danielleford04@gmail.com',
-        subject: 'Email from Node-App: A Test Message!',
-        text: 'Some content to send'
-    };
-
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'danielleford04@gmail.com',
-            pass: 'RedDragon1!'
+        subject: 'Message',
+        text: 'I hope this message gets sent!',
+        ses: { // optional extra arguments for SendRawEmail
         }
+    }, (err, info) => {
+        console.log(err, info)
+        // console.log(info.envelope);
+        // console.log(info.messageId);
     });
 
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Email sent: ' + info.response);
-        }
-    });
 });
 
 /* UPDATE EMAIL */

@@ -5,10 +5,11 @@ var EmailSchema = new mongoose.Schema({
   subject: { type: String, required: true},
   body: { type: String, required: true},
   date: Date,
+  type: String,
   event_id: { type: String, required: true},
   phase_id: { type: String, required: true},
   updated_at: { type: Date, default: Date.now },
-    attachment: Array,
+  attachment: Array,
 });
 
 module.exports = mongoose.model('Email', EmailSchema);
