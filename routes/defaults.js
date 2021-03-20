@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var Default = require('../models/Default.js');
 var Phase = require('../models/Phase.js');
 var User = require('../models/User.js');
+var Email = require('../models/Email.js');
 
 /* GET ALL DEFAULTS */
 router.get('/', function(req, res, next) {
@@ -36,8 +37,12 @@ router.post('/', function(req, res, next) {
     Default.create(req.body, function (err, post) {
         if (err) return next(err);
 
+        let default_id = post._id;
+        let registration_default_id;
+
         createEventPhases();
         addToUserDefaults();
+
 
         function createEventPhases() {
             var registration_body = {
@@ -66,6 +71,8 @@ router.post('/', function(req, res, next) {
             };
             Phase.create(registration_body, function (err, post) {
                 if (err) return next(err);
+                registration_default_id = post._id;
+                addDefaultConfirmationEmail();
                 Phase.create(preparation_body, function (err, post) {
                     if (err) return next(err);
                     Phase.create(arrival_body, function (err, post) {
@@ -96,6 +103,22 @@ router.post('/', function(req, res, next) {
                 // user_response = post;
                 if (err) return next(err);
                 res.json(post)
+            });
+        }
+
+        function addDefaultConfirmationEmail() {
+            var email_data = {
+                'type': 'confirmation',
+                'phase_id': registration_default_id,
+                'event_id': default_id,
+                'subject': 'default confirmation email',
+                'body': 'default body',
+                'name': 'confirmation email'
+            };
+
+            Email.create(email_data, function (err, post) {
+                if (err) return next(err);
+                console.log(post)
             });
         }
         //returns user response w defaults updated in user info

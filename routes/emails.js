@@ -1,9 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-var nodemailer = require('nodemailer');
-let aws = require('aws-sdk');
-// var cron = require('node-cron');
 var Email = require('../models/Email.js');
 
 /* GET ALL EMAILS */
