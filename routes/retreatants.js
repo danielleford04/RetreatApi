@@ -35,7 +35,6 @@ router.get('/:id', function(req, res, next) {
 router.post('/', function(req, res, next) {
   Retreatant.create(req.body, function (err, post) {
     if (err) return next(err);
-        console.log(post)
 
       Email.find({ event_id: post.event_id, type: "confirmation" } , function (err, data) {
           if (err) return next(err);
@@ -46,34 +45,11 @@ router.post('/', function(req, res, next) {
               'to': post.email,
               'subject': confirmationEmail.subject,
               'body': confirmationEmail.body
-          }
+          };
           sendEmail(emailData)
 
       });
 
-
-
-      // // sendConfirmationEmail()
-      // function sendConfirmationEmail(confirmationEmail) {
-      //     console.log(confirmationEmail)
-      //     let transporter = nodemailer.createTransport({
-      //         SES: new aws.SES({region: 'us-east-2', apiVersion: "2010-12-01"})
-      //
-      //     });
-      //
-      //     transporter.sendMail({
-      //         from: 'danielleford04@gmail.com',
-      //         to: post.email,
-      //         subject: confirmationEmail.subject,
-      //         text: confirmationEmail.body,
-      //         ses: { // optional extra arguments for SendRawEmail
-      //         }
-      //     }, (err, info) => {
-      //         console.log(err, info)
-      //         // console.log(info.envelope);
-      //         // console.log(info.messageId);
-      //     });
-      // }
     res.json(post);
   });
 });
