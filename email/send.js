@@ -1,9 +1,10 @@
 var nodemailer = require('nodemailer');
 let aws = require('aws-sdk');
+const { accessKeyId, secretAccessKey } = require('./aws_keys');
 
 aws.config.update({
-    accessKeyId: 'AKIAI2AHW3UEQ6T56HKA',
-    secretAccessKey: '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',
+    accessKeyId: accessKeyId,
+    secretAccessKey: secretAccessKey,
     region: 'us-east-2'
 });
 
