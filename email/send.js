@@ -1,6 +1,12 @@
 var nodemailer = require('nodemailer');
 let aws = require('aws-sdk');
 
+aws.config.update({
+    accessKeyId: 'AKIAI2AHW3UEQ6T56HKA',
+    secretAccessKey: 'AFS/dlf0McPHfCAAtQ/q8LdgSoH6hBE+aF7s8IUk',
+    region: 'us-east-2'
+});
+
 // Sample email:
 // {
 //     from: 'danielleford04@gmail.com',
