@@ -115,11 +115,9 @@ router.post('/', function(req, res, next) {
                 'type': 'confirmation',
                 'name': 'confirmation email'
             };
-            console.log('email_data', email_data)
 
             Email.create(email_data, function (err, post) {
                 if (err) return next(err);
-                console.log(post)
             });
         }
         //returns user response w defaults updated in user info

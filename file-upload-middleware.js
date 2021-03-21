@@ -3,8 +3,6 @@ var next = require('next');
 var File = require('./models/File.js');
 
 function fileUploadMiddleware(req, res, next) {
-    console.log(req.body);
-    console.log(req.file);
     fs.writeFileSync('./Uploads/' + req.file.originalname,req.file.buffer);
     // next()
 

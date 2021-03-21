@@ -56,7 +56,7 @@ app.prepare()
       server.use('/instructions', passport.authenticate('jwt', {session: false}), instructions);
       server.use('/phases', passport.authenticate('jwt', {session: false}), phases);
       server.use('/retreatants', passport.authenticate('jwt', {session: false}), retreatants);
-      server.use('/files', passport.authenticate('jwt', {session: false}), files);
+      server.use('/files', files);
       server.use('/defaults', passport.authenticate('jwt', {session: false}), defaults);
 
     server.get('*', (req, res) => {

@@ -23,7 +23,8 @@ aws.config.update({
 // }
 
 
-module.exports = function sendEmail(emailData) {
+
+module.exports = async function sendEmail(emailData) {
     let email_data = {
         from: emailData.from,
         to: emailData.to,
@@ -33,30 +34,35 @@ module.exports = function sendEmail(emailData) {
 
     let attachment_paths = [];
 
-    // if (emailData.attachments.length > 0) {
-    //     for (let attachment of emailData.attachments) {
-    //         File.findById(attachment, function (err, post) {
-    //             if (err) return next(err);
-    //             res.json(post);
-    //         });
-    //     }
-    //
-    //
-    // }
-    //
+    if (emailData.attachment.length > 0) {
+        for (let attachment of emailData.attachment) {
+            let file_info = await getFileInfo(attachment)
+               let attachment_data = {
+                   filename: file_info.name,
+                   path: `./Uploads/${file_info.file_name}`
+               }
+               attachment_paths.push(attachment_data)
+        }
+        email_data.attachments = attachment_paths;
+
+    }
+
+    function getFileInfo(id) {
+        return File.findById(id).exec()
+    }
 
     // create Nodemailer SES transporter
     let transporter = nodemailer.createTransport({
         SES: new aws.SES({ region: 'us-east-2', apiVersion: "2010-12-01" })
 
     });
+    
 
 
 // send some mail
-    transporter.sendMail({
-
-        attachments: [{path: './Uploads/2.png' }]
-    }, (err, info) => {
+    transporter.sendMail(
+        email_data
+    , (err, info) => {
         console.log(err, info)
         // console.log(info.envelope);
         // console.log(info.messageId);

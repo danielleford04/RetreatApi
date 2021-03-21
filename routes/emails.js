@@ -19,6 +19,14 @@ router.get('/:id', function(req, res, next) {
   });
 });
 
+/* GET CONFIRMATION EMAIL BY EVENT_ID */
+router.get('/confirmation/:event_id', function(req, res, next) {
+    Email.find({ event_id: req.params.event_id, type: "confirmation" } , function (err, post) {
+        if (err) return next(err);
+        res.json(post[0]);
+    });
+});
+
 /* GET ALL EMAILS BY PHASE BY PHASE_ID */
 router.get('/phase/:phase_id', function(req, res, next) {
     Email.find({ phase_id: req.params.phase_id } , function (err, post) {
