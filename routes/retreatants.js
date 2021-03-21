@@ -34,11 +34,13 @@ router.get('/:id', function(req, res, next) {
 /* CREATE RETREATANT */
 router.post('/', function(req, res, next) {
   Retreatant.create(req.body, function (err, post) {
+      console.log(post)
     if (err) return next(err);
 
       Email.find({ event_id: post.event_id, type: "confirmation" } , function (err, data) {
           if (err) return next(err);
-          var confirmationEmail = data[0]
+          console.log(data)
+          var confirmationEmail = data[0];
 
           var emailData = {
               'from': 'danielleford04@gmail.com',

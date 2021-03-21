@@ -108,13 +108,14 @@ router.post('/', function(req, res, next) {
 
         function addDefaultConfirmationEmail() {
             var email_data = {
-                'type': 'confirmation',
                 'phase_id': registration_default_id,
                 'event_id': default_id,
                 'subject': 'default confirmation email',
                 'body': 'default body',
+                'type': 'confirmation',
                 'name': 'confirmation email'
             };
+            console.log('email_data', email_data)
 
             Email.create(email_data, function (err, post) {
                 if (err) return next(err);

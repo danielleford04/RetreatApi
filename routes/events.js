@@ -191,6 +191,9 @@ router.post('/', function(req, res, next) {
                     event_id: event_id,
                     phase_id: phase_id
                 };
+                if (email.type) {
+                    email_body.type = email.type;
+                }
                 Email.create(email_body, function (err, post) {
                     if (err) return next(err);
                 });

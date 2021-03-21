@@ -1,7 +1,6 @@
 const express = require('express')
 const next = require('next')
 const multer = require('multer')
-//const cloudinary = require('cloudinary')
 const bodyParser = require('body-parser')
 const fileUploadMiddleware = require('./file-upload-middleware')
 var mongoose = require('mongoose');
@@ -49,26 +48,6 @@ app.prepare()
       server.use(passport.initialize());
       // Passport config
       require("./validation/passport")(passport);
-
-    // const storage = multer.memoryStorage()
-    // const upload = multer({ storage })
-    //
-    //   server.post('/upload', upload.single('image'), function(req, res, next) {
-    //         console.log(req.body)
-    //       const image = req.file.buffer
-    //       console.log(image);
-    //
-    //   });
-    //
-    // server.post('/files', upload.single('file'), fileUploadMiddleware)
-    //
-    // server.post('/api/changeProfilePicture', (req, res) => {
-    //   console.log('/api/changeProfilePicture')
-    //   console.log(req.body)
-    //   // you can do whatever you want with this data
-    //   // change profile pic, save to DB, or send it to another API
-    //   res.end()
-    // })
 
       server.use('/users', users);
       server.use('/emails', emails);
