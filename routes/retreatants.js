@@ -44,7 +44,8 @@ router.post('/', function(req, res, next) {
               'from': 'danielleford04@gmail.com',
               'to': post.email,
               'subject': confirmationEmail.subject,
-              'body': confirmationEmail.body
+              'body': confirmationEmail.body,
+              'event_id': post.event_id
           };
           if (confirmationEmail.attachment) {
               emailData.attachment = confirmationEmail.attachment

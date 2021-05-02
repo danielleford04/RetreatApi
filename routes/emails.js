@@ -1,7 +1,16 @@
 var express = require('express');
 var router = express.Router();
+let aws = require('aws-sdk');
+const { accessKeyId, secretAccessKey } = require('../email/aws_keys');
 var mongoose = require('mongoose');
 var Email = require('../models/Email.js');
+
+aws.config.update({
+    accessKeyId: accessKeyId,
+    secretAccessKey: secretAccessKey,
+    region: 'us-east-2'
+});
+const ses = new aws.SES()
 
 /* GET ALL EMAILS */
 router.get('/', function(req, res, next) {
@@ -48,6 +57,36 @@ router.post('/', function(req, res, next) {
 router.post('/send', function(req, res, next) {
     // TODO: rewrite w email utility
 
+});
+
+/* VERIFY SENDER EMAIL ADDRESS */
+router.post('/verify', function(req, res, next) {
+    var params = {
+        EmailAddress: req.body.email
+    };
+    ses.verifyEmailIdentity(params, function(err, data) {
+        if (err) console.log(err, err.stack); // an error occurred
+        else     console.log(data);           // successful response
+        /*
+        data = {
+        }
+        */
+    });
+});
+
+/* CHECK IF SENDER EMAIL ADDRESS IS VERIFIED*/
+router.get('/verificationStatus/:email_address', function(req, res, next) {
+    var params = {
+        Identities: [req.params.email_address]
+    };
+    ses.getIdentityVerificationAttributes(params, function(err, data) {
+        if (err) console.log(err, err.stack); // an error occurred
+        else     console.log(data);           // successful response
+        /*
+        data = {
+        }
+        */
+    });
 });
 
 /* UPDATE EMAIL */

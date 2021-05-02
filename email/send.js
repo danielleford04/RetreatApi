@@ -1,13 +1,18 @@
 var nodemailer = require('nodemailer');
 let aws = require('aws-sdk');
+const ses = new aws.SES()
+var moment = require('moment');
 const { accessKeyId, secretAccessKey } = require('./aws_keys');
 var File = require('../models/File.js');
+var Event = require('../models/Event.js');
 
 aws.config.update({
     accessKeyId: accessKeyId,
     secretAccessKey: secretAccessKey,
     region: 'us-east-2'
 });
+
+//required: event_id
 
 // Sample email:
 // {
@@ -25,12 +30,37 @@ aws.config.update({
 
 
 module.exports = async function sendEmail(emailData) {
+    let email_body;
+    let event_date;
     let email_data = {
         from: emailData.from,
         to: emailData.to,
         subject: emailData.subject,
-        text: emailData.body,
+        text: null,
     }
+
+    function getEventInfo(id) {
+        return Event.findById(id).exec()
+    }
+    let event_info = await getEventInfo(emailData.event_id);
+
+    if (event_info.type === "daylong") {
+        event_date = moment(event_info.start_date).format('MMMM Do, YYYY')
+    } else {
+        event_date = `${moment(event_info.start_date).format('MMMM Do, YYYY')} - ${moment(event_info.end_date).format('MMMM Do, YYYY')}`
+    }
+    let template_variable_info = {
+        eventName: event_info.name,
+        eventDate: event_date
+    }
+    email_body = emailData.body;
+
+
+    email_body = emailData.body.replace(/{([^{}]+)}/g, function(keyExpr, key) {
+        return template_variable_info[key] || "";
+    });
+
+    email_data.text = email_body;
 
     let attachment_paths = [];
 
@@ -69,4 +99,19 @@ module.exports = async function sendEmail(emailData) {
     });
 
 
+}
+
+module.exports = async function verifyEmailAddress(emailAddress) {
+
+    var params = {
+        EmailAddress: "danielleford04@gmail.com"
+    };
+    ses.verifyEmailIdentity(params, function(err, data) {
+        if (err) console.log(err, err.stack); // an error occurred
+        else     console.log(data);           // successful response
+        /*
+        data = {
+        }
+        */
+    });
 }
