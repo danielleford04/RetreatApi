@@ -56,7 +56,7 @@ module.exports = async function sendEmail(emailData) {
         SES: new aws.SES({ region: 'us-east-2', apiVersion: "2010-12-01" })
 
     });
-    
+
 
 
 // send some mail

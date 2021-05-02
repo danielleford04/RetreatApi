@@ -52,8 +52,10 @@ router.post('/send', function(req, res, next) {
 
 /* UPDATE EMAIL */
 router.put('/:id', function(req, res, next) {
-  Email.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
+    console.log(1,req.body)
+  Email.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, post) {
     if (err) return next(err);
+    console.log(post)
     res.json(post);
   });
 });
