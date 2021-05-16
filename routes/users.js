@@ -2,12 +2,21 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 const bcrypt = require("bcryptjs");
+let aws = require('aws-sdk');
+const { accessKeyId, secretAccessKey } = require('../email/aws_keys');
 const jwt = require("jsonwebtoken");
 var User = require('../models/User.js');
 // Load input validation
 const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
 const verifyEmailAddress = require("../email/verify");
+
+aws.config.update({
+    accessKeyId: accessKeyId,
+    secretAccessKey: secretAccessKey,
+    region: 'us-east-2'
+});
+const ses = new aws.SES()
 
 // @route POST api/users/register
 // @desc Register user
@@ -69,6 +78,24 @@ router.post("/login", (req, res) => {
         // Check if user exists
         if (!user) {
             return res.status(404).json({ emailnotfound: "Email not found" });
+        }
+
+        if (user.sender_email_pending) {
+            var params = {
+                Identities: [user.sender_email_pending]
+            };
+            ses.getIdentityVerificationAttributes(params, function(err, data) {
+                if (err) console.log(err, err.stack); // an error occurred
+                else
+                if (JSON.stringify(data.VerificationAttributes) == '{}' || data.VerificationAttributes[user.sender_email_pending].VerificationStatus === "Success") {
+                    User.findOneAndUpdate({ email: user.email }, {sender_email_verified: user.sender_email_pending, sender_email_pending: null}, {new: true}, function (err, post) {
+                        if (err) return next(err);
+
+                    });
+                } else {
+                    verifyEmailAddress(user.sender_email_pending)
+                }
+            });
         }
 // Check password
         bcrypt.compare(password, user.password).then(isMatch => {
