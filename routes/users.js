@@ -7,6 +7,7 @@ var User = require('../models/User.js');
 // Load input validation
 const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
+const verifyEmailAddress = require("../email/verify");
 
 // @route POST api/users/register
 // @desc Register user
@@ -27,6 +28,7 @@ router.post("/register", (req, res) => {
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             email: req.body.email,
+            verified_email_pending: req.body.email,
             password: req.body.password
         });
 // Hash password before saving in database
@@ -36,7 +38,12 @@ router.post("/register", (req, res) => {
                 newUser.password = hash;
                 newUser
                     .save()
-                    .then(user => res.json(user))
+                    .then(
+                        user => {
+                            verifyEmailAddress(user.email)
+                            res.json(user)
+                        }
+                    )
                     .catch(err => console.log(err));
             });
         });

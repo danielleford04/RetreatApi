@@ -12,6 +12,14 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    sender_email_pending: {
+        type: String,
+        default: ''
+    },
+    sender_email_verified: {
+        type: String,
+        default: ''
+    },
     password: {
         type: String,
         required: true
