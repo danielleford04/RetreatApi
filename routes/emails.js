@@ -4,6 +4,8 @@ let aws = require('aws-sdk');
 const { accessKeyId, secretAccessKey } = require('../email/aws_keys');
 var mongoose = require('mongoose');
 var Email = require('../models/Email.js');
+var User = require('../models/User.js');
+const verifyEmailAddress = require("../email/verify");
 
 aws.config.update({
     accessKeyId: accessKeyId,
@@ -59,19 +61,36 @@ router.post('/send', function(req, res, next) {
 
 });
 
+//check if verified
+//if so, set email on user
+//if not, set as pending email and send to amazon
+
 /* VERIFY SENDER EMAIL ADDRESS */
 router.post('/verify', function(req, res, next) {
+    // console.log(req)
     var params = {
-        EmailAddress: req.body.email
+        Identities: [req.body.email_to_verify]
     };
-    ses.verifyEmailIdentity(params, function(err, data) {
+    ses.getIdentityVerificationAttributes(params, function(err, data) {
         if (err) console.log(err, err.stack); // an error occurred
-        else     console.log(data);           // successful response
-        /*
-        data = {
-        }
-        */
+        else
+            if (JSON.stringify(data.VerificationAttributes) == '{}' || data.VerificationAttributes[req.body.email_to_verify].VerificationStatus === "Success") {
+                User.findOneAndUpdate({ email: req.body.email }, {sender_email_verified: req.body.email_to_verify, sender_email_pending: null}, {new: true}, function (err, post) {
+                    if (err) return next(err);
+                    res.json({message:"Success! Your sender email has been updated.", user: post});
+                });
+            } else {
+                verifyEmailAddress(req.body.email)
+                User.findOneAndUpdate({ email: req.body.email }, {sender_email_pending: req.body.email_to_verify}, {new: true}, function (err, post) {
+                    if (err) return next(err);
+                    res.json({message:"A confirmation email has been sent to this email address. Please follow the instructions to verify this email.", user: post});
+                });
+
+            }
     });
+
+
+
 });
 
 /* CHECK IF SENDER EMAIL ADDRESS IS VERIFIED*/
