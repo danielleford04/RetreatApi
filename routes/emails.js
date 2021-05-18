@@ -61,10 +61,6 @@ router.post('/send', function(req, res, next) {
 
 });
 
-//check if verified
-//if so, set email on user
-//if not, set as pending email and send to amazon
-
 /* VERIFY SENDER EMAIL ADDRESS */
 router.post('/verify', function(req, res, next) {
     // console.log(req)
@@ -74,7 +70,7 @@ router.post('/verify', function(req, res, next) {
     ses.getIdentityVerificationAttributes(params, function(err, data) {
         if (err) console.log(err, err.stack); // an error occurred
         else
-            if (JSON.stringify(data.VerificationAttributes) == '{}' || data.VerificationAttributes[req.body.email_to_verify].VerificationStatus === "Success") {
+            if (JSON.stringify(data.VerificationAttributes) !== '{}' && data.VerificationAttributes[req.body.email_to_verify].VerificationStatus === "Success") {
                 User.findOneAndUpdate({ email: req.body.email }, {sender_email_verified: req.body.email_to_verify, sender_email_pending: null}, {new: true}, function (err, post) {
                     if (err) return next(err);
                     res.json({message:"Success! Your sender email has been updated.", user: post});
@@ -88,25 +84,32 @@ router.post('/verify', function(req, res, next) {
 
             }
     });
-
-
-
 });
 
 /* CHECK IF SENDER EMAIL ADDRESS IS VERIFIED*/
-router.get('/verificationStatus/:email_address', function(req, res, next) {
+router.post('/verification-status', function(req, res, next) {
+    // console.log(req)
     var params = {
-        Identities: [req.params.email_address]
+        Identities: [req.body.email_to_verify]
     };
     ses.getIdentityVerificationAttributes(params, function(err, data) {
         if (err) console.log(err, err.stack); // an error occurred
-        else     console.log(data);           // successful response
-        /*
-        data = {
+        else
+        if (JSON.stringify(data.VerificationAttributes) !== '{}' && data.VerificationAttributes[req.body.email_to_verify].VerificationStatus === "Success") {
+            User.findOneAndUpdate({ email: req.body.email }, {sender_email_verified: req.body.email_to_verify, sender_email_pending: null}, {new: true}, function (err, post) {
+                if (err) return next(err);
+                res.json({message:"Success! Your sender email is verified.", user: post});
+            });
+        } else {
+            User.find({ email: req.body.email }, function (err, post) {
+                if (err) return next(err);
+                res.json({message:"This email address has not been verified.", user: post[0]});
+            });
+
         }
-        */
     });
 });
+
 
 /* UPDATE EMAIL */
 router.put('/:id', function(req, res, next) {
