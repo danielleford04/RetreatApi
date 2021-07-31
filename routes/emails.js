@@ -5,7 +5,9 @@ const { accessKeyId, secretAccessKey } = require('../email/aws_keys');
 var mongoose = require('mongoose');
 var Email = require('../models/Email.js');
 var User = require('../models/User.js');
+var Retreatant = require('../models/Retreatant.js');
 const verifyEmailAddress = require("../email/verify");
+const sendEmail = require("../email/send");
 
 aws.config.update({
     accessKeyId: accessKeyId,
@@ -55,15 +57,37 @@ router.post('/', function(req, res, next) {
   });
 });
 
-/* SEND EMAIL */
-router.post('/send', function(req, res, next) {
-    // TODO: rewrite w email utility
+/* SEND EMAIL NOW TO ALL RETREATANTS */
+router.post('/send', async function(req, res, next) {
+    //TODO: attachments, and response to the FE
+    var emailData = {
+        'from': req.body.sender_email_verified,
+        'to': '',
+        'subject': req.body.subject,
+        'body': req.body.body,
+        'event_id': req.body.event_id
+    };
+
+    if (req.body.attachment) {
+        emailData.attachment = req.body.attachment
+    }
+    let errors;
+    let response;
+
+    Retreatant.find({ event_id: req.body.event_id } , async function (err, post) {
+        if (err) return next(err);
+        for (let retreatant of post) {
+            emailData.to = retreatant.email
+            response = await sendEmail(emailData);
+        }
+        //TODO get actual error handling when i can figure out what errors would even look like
+        res.json("Your email has successfully been sent.")
+    });
 
 });
 
 /* VERIFY SENDER EMAIL ADDRESS */
 router.post('/verify', function(req, res, next) {
-    // console.log(req)
     var params = {
         Identities: [req.body.email_to_verify]
     };

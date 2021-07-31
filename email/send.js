@@ -64,7 +64,7 @@ module.exports = async function sendEmail(emailData) {
 
     let attachment_paths = [];
 
-    if (emailData.attachment.length > 0) {
+    if (emailData.attachment && emailData.attachment.length > 0) {
         for (let attachment of emailData.attachment) {
             let file_info = await getFileInfo(attachment)
                let attachment_data = {
@@ -89,14 +89,8 @@ module.exports = async function sendEmail(emailData) {
 
 
 
-// send some mail
-    transporter.sendMail(
-        email_data
-    , (err, info) => {
-        console.log(err, info)
-        // console.log(info.envelope);
-        // console.log(info.messageId);
-    });
-
+    // send some mail
+    return await transporter.sendMail(
+        email_data)
 
 }
