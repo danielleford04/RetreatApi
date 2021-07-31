@@ -1,5 +1,5 @@
-let accessKeyId = 'AKIA3VG3T2OD7RZLGYUP'
+let accessKeyId = 'CHANGED'
 
-let secretAccessKey = 'atGPv2ZE+VK97rQA2KTxqzNZP4T7dPaZyMk9AReI'
+let secretAccessKey = 'poop'
 
 module.exports = { accessKeyId, secretAccessKey }
