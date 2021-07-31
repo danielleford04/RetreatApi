@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0fddca03-7449-4e86-ade0-accaae83fabb" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/email/aws_keys.js" beforeDir="false" afterPath="$PROJECT_DIR$/email/aws_keys.js" afterDir="false" />
-    </list>
+    <list default="true" id="0fddca03-7449-4e86-ade0-accaae83fabb" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -104,7 +102,7 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gitignore" value="2" />
-          <entry key="js" value="71" />
+          <entry key="js" value="72" />
           <entry key="json" value="1" />
           <entry key="md" value="1" />
         </counts>
@@ -112,7 +110,7 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="JSON" value="1" />
-          <entry key="JavaScript" value="71" />
+          <entry key="JavaScript" value="72" />
           <entry key="PLAIN_TEXT" value="3" />
         </counts>
       </usages-collector>
@@ -157,7 +155,7 @@
         <entry file="file://$PROJECT_DIR$/email/aws_keys.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="30">
-              <caret line="2" column="27" selection-start-line="2" selection-start-column="27" selection-end-line="2" selection-end-column="27" />
+              <caret line="2" column="63" selection-start-line="2" selection-start-column="63" selection-end-line="2" selection-end-column="63" />
             </state>
           </provider>
         </entry>
@@ -426,12 +424,12 @@
       <workItem from="1615768821951" duration="17689000" />
       <workItem from="1619301756796" duration="10589000" />
       <workItem from="1620248306315" duration="15295000" />
-      <workItem from="1624923960705" duration="934000" />
+      <workItem from="1624923960705" duration="1302000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="138892000" />
+    <option name="totallyTimeSpent" value="139260000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -704,7 +702,7 @@
     <entry file="file://$PROJECT_DIR$/email/aws_keys.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
-          <caret line="2" column="27" selection-start-line="2" selection-start-column="27" selection-end-line="2" selection-end-column="27" />
+          <caret line="2" column="63" selection-start-line="2" selection-start-column="63" selection-end-line="2" selection-end-column="63" />
         </state>
       </provider>
     </entry>
