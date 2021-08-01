@@ -20,7 +20,7 @@ var Event = require('../models/Event.js');
 //     }]
 // }
 
-function createEmail(retreatants, emailData) {
+async function createEmail(retreatants, emailData) {
     
     const emails = retreatants.map(r => r.email)
 

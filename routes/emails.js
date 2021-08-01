@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 let aws = require('aws-sdk');
-const { accessKeyId, secretAccessKey } = require('../email/aws_keys');
 var mongoose = require('mongoose');
 var Email = require('../models/Email.js');
 var User = require('../models/User.js');
@@ -9,11 +8,6 @@ var Retreatant = require('../models/Retreatant.js');
 const verifyEmailAddress = require("../email/verify");
 const {sendEmail, createEmail} = require("../email/send");
 
-aws.config.update({
-    accessKeyId: accessKeyId,
-    secretAccessKey: secretAccessKey,
-    region: 'us-east-2'
-});
 const ses = new aws.SES()
 
 /* GET ALL EMAILS */
@@ -57,13 +51,13 @@ router.post('/', function(req, res, next) {
     });
 });
 
-/* SAVE EMAIL */
+/* SCHEDULE EMAIL */
 router.post('/schedule', function(req, res, next) {
     
     Retreatant.find({ event_id: req.body.event_id } , async function (err, retreatants) {
         if (err) return next(err);
                 
-        const email = createEmail(retreatants, req.body)
+        const email = await createEmail(retreatants, req.body)
         
         const sfnInput = {
             "dueDate": email.sendTimestamp,
@@ -75,7 +69,7 @@ router.post('/schedule', function(req, res, next) {
             "appendScheduleDateToBody": false
         }
     
-        const stepfunctions = new AWS.StepFunctions();
+        const stepfunctions = new aws.StepFunctions();
         const stateMachineArn = "arn:aws:states:us-east-2:801471976327:stateMachine:ScheduledEmail";
         const result = await stepfunctions.startExecution({
             stateMachineArn,
@@ -92,7 +86,7 @@ router.post('/send', async function(req, res, next) {
     Retreatant.find({ event_id: req.body.event_id } , async function (err, event) {
         if (err) return next(err);
         for (let retreatant of event) {
-            const email = createEmail(retreatant, req.body)
+            const email = await createEmail(retreatant, req.body)
             await sendEmail(email);
         }
         //TODO get actual error handling when i can figure out what errors would even look like
