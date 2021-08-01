@@ -2,15 +2,8 @@ var nodemailer = require('nodemailer');
 let aws = require('aws-sdk');
 const ses = new aws.SES()
 var moment = require('moment');
-const { accessKeyId, secretAccessKey } = require('./aws_keys');
 var File = require('../models/File.js');
 var Event = require('../models/Event.js');
-
-aws.config.update({
-    accessKeyId: accessKeyId,
-    secretAccessKey: secretAccessKey,
-    region: 'us-east-2'
-});
 
 //required: event_id
 
@@ -26,8 +19,6 @@ aws.config.update({
 //         path: '/path/to/file.txt' // stream this file
 //     }]
 // }
-
-
 
 module.exports = async function sendEmail(emailData) {
     let email_body;
@@ -87,10 +78,7 @@ module.exports = async function sendEmail(emailData) {
 
     });
 
-
-
     // send some mail
-    return await transporter.sendMail(
-        email_data)
+    return await transporter.sendMail(email_data);
 
 }
