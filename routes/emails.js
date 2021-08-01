@@ -7,7 +7,7 @@ var Email = require('../models/Email.js');
 var User = require('../models/User.js');
 var Retreatant = require('../models/Retreatant.js');
 const verifyEmailAddress = require("../email/verify");
-const sendEmail = require("../email/send");
+const {sendEmail, createEmail} = require("../email/send");
 
 aws.config.update({
     accessKeyId: accessKeyId,
@@ -51,10 +51,32 @@ router.get('/phase/:phase_id', function(req, res, next) {
 
 /* SAVE EMAIL */
 router.post('/', function(req, res, next) {
-  Email.create(req.body, function (err, post) {
-    if (err) return next(err);
-    res.json(post);
-  });
+    Email.create(req.body, function (err, post) {
+      if (err) return next(err);
+      res.json(post);
+    });
+});
+
+/* SAVE EMAIL */
+router.post('/schedule', function(req, res, next) {
+    
+    const emailData = {
+        'from': req.body.sender_email_verified,
+        'to': '',
+        'subject': req.body.subject,
+        'body': req.body.body,
+        'event_id': req.body.event_id,
+        'send_timestamp': req.body.send_timestamp
+    };
+
+    const stepfunctions = new AWS.StepFunctions();
+    const stateMachineArn = "arn:aws:states:us-east-2:801471976327:stateMachine:ScheduledEmail";
+    const result = await stepfunctions.startExecution({
+        stateMachineArn,
+        input: JSON.stringify(event),
+    }).promise();
+    console.log(`State machine ${stateMachineArn} executed successfully`, result);
+    return result;
 });
 
 /* SEND EMAIL NOW TO ALL RETREATANTS */
@@ -71,19 +93,17 @@ router.post('/send', async function(req, res, next) {
     if (req.body.attachment) {
         emailData.attachment = req.body.attachment
     }
-    let errors;
-    let response;
 
-    Retreatant.find({ event_id: req.body.event_id } , async function (err, post) {
+    Retreatant.find({ event_id: req.body.event_id } , async function (err, event) {
         if (err) return next(err);
-        for (let retreatant of post) {
+        for (let retreatant of event) {
             emailData.to = retreatant.email
-            response = await sendEmail(emailData);
+            const email = createEmail(retreatant.email, req.body)
+            await sendEmail(email);
         }
         //TODO get actual error handling when i can figure out what errors would even look like
         res.json("Your email has successfully been sent.")
     });
-
 });
 
 /* VERIFY SENDER EMAIL ADDRESS */
@@ -92,8 +112,9 @@ router.post('/verify', function(req, res, next) {
         Identities: [req.body.email_to_verify]
     };
     ses.getIdentityVerificationAttributes(params, function(err, data) {
-        if (err) console.log(err, err.stack); // an error occurred
-        else
+        if (err) {
+            console.log(err, err.stack); // an error occurred
+        }else{
             if (JSON.stringify(data.VerificationAttributes) !== '{}' && data.VerificationAttributes[req.body.email_to_verify].VerificationStatus === "Success") {
                 User.findOneAndUpdate({ email: req.body.email }, {sender_email_verified: req.body.email_to_verify, sender_email_pending: null}, {new: true}, function (err, post) {
                     if (err) return next(err);
@@ -107,6 +128,7 @@ router.post('/verify', function(req, res, next) {
                 });
 
             }
+        }
     });
 });
 
