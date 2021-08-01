@@ -60,45 +60,39 @@ router.post('/', function(req, res, next) {
 /* SAVE EMAIL */
 router.post('/schedule', function(req, res, next) {
     
-    const emailData = {
-        'from': req.body.sender_email_verified,
-        'to': '',
-        'subject': req.body.subject,
-        'body': req.body.body,
-        'event_id': req.body.event_id,
-        'send_timestamp': req.body.send_timestamp
-    };
-
-    const stepfunctions = new AWS.StepFunctions();
-    const stateMachineArn = "arn:aws:states:us-east-2:801471976327:stateMachine:ScheduledEmail";
-    const result = await stepfunctions.startExecution({
-        stateMachineArn,
-        input: JSON.stringify(event),
-    }).promise();
-    console.log(`State machine ${stateMachineArn} executed successfully`, result);
-    return result;
+    Retreatant.find({ event_id: req.body.event_id } , async function (err, retreatants) {
+        if (err) return next(err);
+                
+        const email = createEmail(retreatants, req.body)
+        
+        const sfnInput = {
+            "dueDate": email.sendTimestamp,
+            "email": {
+                "to": email.to,
+                "subject": email.subject,
+                "textBody": email.text,
+            },
+            "appendScheduleDateToBody": false
+        }
+    
+        const stepfunctions = new AWS.StepFunctions();
+        const stateMachineArn = "arn:aws:states:us-east-2:801471976327:stateMachine:ScheduledEmail";
+        const result = await stepfunctions.startExecution({
+            stateMachineArn,
+            input: JSON.stringify(sfnInput),
+        }).promise();
+        console.log(`State machine ${stateMachineArn} executed successfully`, result);
+        return result;
+    });
 });
 
 /* SEND EMAIL NOW TO ALL RETREATANTS */
 router.post('/send', async function(req, res, next) {
     //TODO: attachments, and response to the FE
-    var emailData = {
-        'from': req.body.sender_email_verified,
-        'to': '',
-        'subject': req.body.subject,
-        'body': req.body.body,
-        'event_id': req.body.event_id
-    };
-
-    if (req.body.attachment) {
-        emailData.attachment = req.body.attachment
-    }
-
     Retreatant.find({ event_id: req.body.event_id } , async function (err, event) {
         if (err) return next(err);
         for (let retreatant of event) {
-            emailData.to = retreatant.email
-            const email = createEmail(retreatant.email, req.body)
+            const email = createEmail(retreatant, req.body)
             await sendEmail(email);
         }
         //TODO get actual error handling when i can figure out what errors would even look like

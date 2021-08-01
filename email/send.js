@@ -20,15 +20,16 @@ var Event = require('../models/Event.js');
 //     }]
 // }
 
-
-function createEmail(recipent, emailData) {
+function createEmail(retreatants, emailData) {
     
+    const emails = retreatants.map(r => r.email)
+
     let email_body;
     let event_date;
 
     const emailParams = {
         'from': emailData.sender_email_verified,
-        'to': recipent,
+        'to': emails,
         'subject': emailData.subject,
         'body': emailData.body,
         'event_id': emailData.event_id
