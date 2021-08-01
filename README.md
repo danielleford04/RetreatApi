@@ -1,4 +1,4 @@
-# Reatreat API
+# Retreat API
 
 ## Pre-reqs
 - docker
