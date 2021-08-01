@@ -15,7 +15,7 @@ const handle = app.getRequestHandler()
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb://localhost/retreats')
+mongoose.connect('mongodb://mongo:27017/retreats',  { useNewUrlParser: true })
     .then(() =>  console.log('connection successful'))
     .catch((err) => console.error(err));
 
