@@ -1,6 +1,5 @@
 var nodemailer = require('nodemailer');
-let aws = require('aws-sdk');
-const ses = new aws.SES()
+let AWS = require('aws-sdk');
 var moment = require('moment');
 var File = require('../models/File.js');
 var Event = require('../models/Event.js');
@@ -84,7 +83,7 @@ async function createEmail(retreatants, emailData) {
 async function sendEmail(emailData) {
     // create Nodemailer SES transporter
     let transporter = nodemailer.createTransport({
-        SES: new aws.SES({ region: 'us-east-2', apiVersion: "2010-12-01" })
+        SES: new AWS.SES({ region: 'us-east-2', apiVersion: "2010-12-01" })
     });
     // send some mail
     return await transporter.sendMail(emailData);

@@ -1,14 +1,14 @@
 var express = require('express');
 var router = express.Router();
-let aws = require('aws-sdk');
-var mongoose = require('mongoose');
+let AWS = require('aws-sdk');
 var Email = require('../models/Email.js');
 var User = require('../models/User.js');
 var Retreatant = require('../models/Retreatant.js');
 const verifyEmailAddress = require("../email/verify");
 const {sendEmail, createEmail} = require("../email/send");
+const logger = require('../log');
 
-const ses = new aws.SES()
+const ses = new AWS.SES()
 
 /* GET ALL EMAILS */
 router.get('/', function(req, res, next) {
@@ -56,11 +56,12 @@ router.post('/schedule', function(req, res, next) {
     
     Retreatant.find({ event_id: req.body.event_id } , async function (err, retreatants) {
         if (err) return next(err);
-                
+        logger.debug(retreatants)    
         const email = await createEmail(retreatants, req.body)
-        
+        logger.debug(email)    
+
         const sfnInput = {
-            "dueDate": email.sendTimestamp,
+            "dueDate": req.body.sendTimestamp,
             "email": {
                 "to": email.to,
                 "subject": email.subject,
@@ -68,15 +69,15 @@ router.post('/schedule', function(req, res, next) {
             },
             "appendScheduleDateToBody": false
         }
-    
-        const stepfunctions = new aws.StepFunctions();
+        logger.debug(`state machine input: ${JSON.stringify(sfnInput)}`)
         const stateMachineArn = "arn:aws:states:us-east-2:801471976327:stateMachine:ScheduledEmail";
-        const result = await stepfunctions.startExecution({
+        const result = await new AWS.StepFunctions({region: 'us-east-2'}).startExecution({
             stateMachineArn,
             input: JSON.stringify(sfnInput),
         }).promise();
-        console.log(`State machine ${stateMachineArn} executed successfully`, result);
-        return result;
+        logger.info(`State machine ${stateMachineArn} executed successfully`, result);
+        res.json({message:"Email has been scheduled"});
+
     });
 });
 
