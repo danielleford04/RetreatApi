@@ -1,26 +1,27 @@
-version: '3'
+version: "3"
 services:
-  node:
-    environment: 
-      - AWS_PROFILE=danielle
-      - LOG_LEVEL=debug
-    depends_on:
-        - 'mongo'
-    restart: always
-    build:
-        context: .
-        dockerfile: Dockerfile
-    ports:
-      - 3000:3000
-    volumes:
-      - ./:/code
-      - $HOME/.aws/credentials:/root/.aws/credentials:ro
-      - $HOME/.aws/config:/root/.aws/config:ro
-  mongo:
-    image: mongo
-    ports:
-      - 27017:27017
-    volumes:
-      - mongodb:/data/db
+    node:
+        environment:
+            - AWS_PROFILE=danielle
+            - LOG_LEVEL=debug
+            - NODE_ENV=dev
+        depends_on:
+            - "mongo"
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - 3000:80
+        volumes:
+            - ./:/code
+            - $HOME/.aws/credentials:/root/.aws/credentials:ro
+            - $HOME/.aws/config:/root/.aws/config:ro
+    mongo:
+        image: mongo
+        ports:
+            - 27017:27017
+        volumes:
+            - mongodb:/data/db
 volumes:
     mongodb:

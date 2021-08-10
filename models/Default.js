@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 
 var DefaultSchema = new mongoose.Schema({
-    type: { type: String, required: true},
+    type: { type: String, required: true },
     updated_at: { type: Date, default: Date.now },
     // phases: { type: Array, required: true},
     // user_id: { type: String, required: true}
@@ -9,9 +9,7 @@ var DefaultSchema = new mongoose.Schema({
 
 //phases: [{name: 'registration', tasks: [], instructions: [], email: {} }, {name: arrival, tasks: [], instructions: [], email: {}}]
 
-
-module.exports = mongoose.model('Default', DefaultSchema);
-
+module.exports = mongoose.model("Default", DefaultSchema);
 
 //why not just make the 'default' an event... and get everything the same way....
 
