@@ -2,11 +2,11 @@
 
 ## Pre-reqs
 
--   docker
--   docker-compose
+- docker
+- docker-compose
 
 ## Run locally
 
--   open docker-compose.yml and set your AWS_PROFILE
--   docker-compose build
--   docker-compose up
+- open docker-compose.yml and set your AWS_PROFILE
+- docker-compose build
+- docker-compose up

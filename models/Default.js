@@ -1,10 +1,10 @@
 var mongoose = require("mongoose");
 
 var DefaultSchema = new mongoose.Schema({
-    type: { type: String, required: true },
-    updated_at: { type: Date, default: Date.now },
-    // phases: { type: Array, required: true},
-    // user_id: { type: String, required: true}
+  type: { type: String, required: true },
+  updated_at: { type: Date, default: Date.now },
+  // phases: { type: Array, required: true},
+  // user_id: { type: String, required: true}
 });
 
 //phases: [{name: 'registration', tasks: [], instructions: [], email: {} }, {name: arrival, tasks: [], instructions: [], email: {}}]
