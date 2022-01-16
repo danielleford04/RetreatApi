@@ -3,7 +3,6 @@ var router = express.Router();
 var mongoose = require('mongoose');
 const bcrypt = require("bcryptjs");
 let aws = require('aws-sdk');
-const { accessKeyId, secretAccessKey } = require('../email/aws_keys');
 const jwt = require("jsonwebtoken");
 var User = require('../models/User.js');
 // Load input validation
@@ -11,11 +10,6 @@ const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
 const verifyEmailAddress = require("../email/verify");
 
-aws.config.update({
-    accessKeyId: accessKeyId,
-    secretAccessKey: secretAccessKey,
-    region: 'us-east-2'
-});
 const ses = new aws.SES()
 
 // @route POST api/users/register

@@ -3,6 +3,7 @@ services:
   node:
     environment: 
       - AWS_PROFILE=danielle
+      - LOG_LEVEL=debug
     depends_on:
         - 'mongo'
     restart: always
@@ -13,6 +14,8 @@ services:
       - 3000:3000
     volumes:
       - ./:/code
+      - $HOME/.aws/credentials:/root/.aws/credentials:ro
+      - $HOME/.aws/config:/root/.aws/config:ro
   mongo:
     image: mongo
     ports:

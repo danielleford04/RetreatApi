@@ -5,7 +5,7 @@ var nodemailer = require('nodemailer');
 let aws = require('aws-sdk');
 var Retreatant = require('../models/Retreatant.js');
 var Email = require('../models/Email.js');
-const sendEmail = require("../email/send");
+const {sendEmail} = require("../email/send");
 
 /* GET ALL RETREATANTS */
 router.get('/', function(req, res, next) {

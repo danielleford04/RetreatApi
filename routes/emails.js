@@ -1,20 +1,14 @@
 var express = require('express');
 var router = express.Router();
-let aws = require('aws-sdk');
-const { accessKeyId, secretAccessKey } = require('../email/aws_keys');
-var mongoose = require('mongoose');
+let AWS = require('aws-sdk');
 var Email = require('../models/Email.js');
 var User = require('../models/User.js');
 var Retreatant = require('../models/Retreatant.js');
 const verifyEmailAddress = require("../email/verify");
-const sendEmail = require("../email/send");
+const {sendEmail, createEmail} = require("../email/send");
+const logger = require('../log');
 
-aws.config.update({
-    accessKeyId: accessKeyId,
-    secretAccessKey: secretAccessKey,
-    region: 'us-east-2'
-});
-const ses = new aws.SES()
+const ses = new AWS.SES()
 
 /* GET ALL EMAILS */
 router.get('/', function(req, res, next) {
@@ -51,39 +45,54 @@ router.get('/phase/:phase_id', function(req, res, next) {
 
 /* SAVE EMAIL */
 router.post('/', function(req, res, next) {
-  Email.create(req.body, function (err, post) {
-    if (err) return next(err);
-    res.json(post);
-  });
+    Email.create(req.body, function (err, post) {
+      if (err) return next(err);
+      res.json(post);
+    });
+});
+
+/* SCHEDULE EMAIL */
+router.post('/schedule', function(req, res, next) {
+    
+    Retreatant.find({ event_id: req.body.event_id } , async function (err, retreatants) {
+        if (err) return next(err);
+        logger.debug(retreatants)    
+        const email = await createEmail(retreatants, req.body)
+        logger.debug(email)    
+
+        const sfnInput = {
+            "dueDate": req.body.sendTimestamp,
+            "email": {
+                "to": email.to,
+                "subject": email.subject,
+                "textBody": email.text,
+            },
+            "appendScheduleDateToBody": false
+        }
+        logger.debug(`state machine input: ${JSON.stringify(sfnInput)}`)
+        const stateMachineArn = "arn:aws:states:us-east-2:801471976327:stateMachine:ScheduledEmail";
+        const result = await new AWS.StepFunctions({region: 'us-east-2'}).startExecution({
+            stateMachineArn,
+            input: JSON.stringify(sfnInput),
+        }).promise();
+        logger.info(`State machine ${stateMachineArn} executed successfully`, result);
+        res.json({message:"Email has been scheduled"});
+
+    });
 });
 
 /* SEND EMAIL NOW TO ALL RETREATANTS */
 router.post('/send', async function(req, res, next) {
     //TODO: attachments, and response to the FE
-    var emailData = {
-        'from': req.body.sender_email_verified,
-        'to': '',
-        'subject': req.body.subject,
-        'body': req.body.body,
-        'event_id': req.body.event_id
-    };
-
-    if (req.body.attachment) {
-        emailData.attachment = req.body.attachment
-    }
-    let errors;
-    let response;
-
-    Retreatant.find({ event_id: req.body.event_id } , async function (err, post) {
+    Retreatant.find({ event_id: req.body.event_id } , async function (err, event) {
         if (err) return next(err);
-        for (let retreatant of post) {
-            emailData.to = retreatant.email
-            response = await sendEmail(emailData);
+        for (let retreatant of event) {
+            const email = await createEmail(retreatant, req.body)
+            await sendEmail(email);
         }
         //TODO get actual error handling when i can figure out what errors would even look like
         res.json("Your email has successfully been sent.")
     });
-
 });
 
 /* VERIFY SENDER EMAIL ADDRESS */
@@ -92,8 +101,9 @@ router.post('/verify', function(req, res, next) {
         Identities: [req.body.email_to_verify]
     };
     ses.getIdentityVerificationAttributes(params, function(err, data) {
-        if (err) console.log(err, err.stack); // an error occurred
-        else
+        if (err) {
+            console.log(err, err.stack); // an error occurred
+        }else{
             if (JSON.stringify(data.VerificationAttributes) !== '{}' && data.VerificationAttributes[req.body.email_to_verify].VerificationStatus === "Success") {
                 User.findOneAndUpdate({ email: req.body.email }, {sender_email_verified: req.body.email_to_verify, sender_email_pending: null}, {new: true}, function (err, post) {
                     if (err) return next(err);
@@ -107,6 +117,7 @@ router.post('/verify', function(req, res, next) {
                 });
 
             }
+        }
     });
 });
 
