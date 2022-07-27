@@ -4,7 +4,7 @@ var moment = require('moment');
 var File = require('../models/File.js');
 var Event = require('../models/Event.js');
 
-const ses = new aws.SES()
+const ses = new aws.SES({ region: 'us-east-2'})
 
 module.exports = async function verifyEmailAddress(emailAddress) {
 
