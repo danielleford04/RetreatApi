@@ -8,7 +8,7 @@ const verifyEmailAddress = require("../email/verify");
 const {sendEmail, createEmail} = require("../email/send");
 const logger = require('../log');
 
-const ses = new AWS.SES()
+const ses = new AWS.SES({ region: 'us-east-2'})
 
 /* GET ALL EMAILS */
 router.get('/', function(req, res, next) {

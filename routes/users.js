@@ -125,7 +125,9 @@ router.post("/login", (req, res) => {
 
 /* GET ALL USERS */
 router.get('/', function(req, res, next) {
+    console.log('get users')
     User.find(function (err, users) {
+        console.log(2)
         if (err) return next(err);
         res.json(users);
     });
